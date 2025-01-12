@@ -16,27 +16,19 @@
  * limitations under the License.
  */
 
-package org.apache.flink.connector.jdbc.core.database.catalog;
+package org.apache.flink.connector.jdbc.spanner;
 
-import org.junit.jupiter.api.Test;
+import org.apache.flink.connector.jdbc.spanner.testutils.SpannerDatabase;
+import org.apache.flink.connector.jdbc.testutils.DatabaseMetadata;
+import org.apache.flink.connector.jdbc.testutils.DatabaseTest;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+/** Base class for Spanner testing. */
+@ExtendWith(SpannerDatabase.class)
+public interface SpannerTestBase extends DatabaseTest {
 
-/** Test for {@link AbstractJdbcCatalog}. */
-class AbstractJdbcCatalogTest {
-
-    @Test
-    void testJdbcUrl() {
-        AbstractJdbcCatalog.validateJdbcUrl("jdbc:dialect://localhost:1234/");
-        AbstractJdbcCatalog.validateJdbcUrl("jdbc:dialect://localhost:1234");
-    }
-
-    @Test
-    void testInvalidJdbcUrl() {
-        assertThatThrownBy(
-                        () ->
-                                AbstractJdbcCatalog.validateJdbcUrl(
-                                        "jdbc:dialect://localhost:1234/db"))
-                .isInstanceOf(IllegalArgumentException.class);
+    @Override
+    default DatabaseMetadata getMetadata() {
+        return SpannerDatabase.getMetadata();
     }
 }
